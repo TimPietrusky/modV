@@ -6,9 +6,14 @@
 	modV.prototype.uuid = undefined;
 	
 	modV.prototype.remoteConnect = function() {
-		if(!this.options.remote.use) return false;
-
 		this.remote = {};
+		
+		if(!this.options.remote.use) {
+			this.remote.update = function() {};
+			this.remote.sendCurrent = function() {};
+			return false;
+		}
+
 
 		let remote = new WebSocket(this.options.remote.address || 'ws://localhost:3133');
 
