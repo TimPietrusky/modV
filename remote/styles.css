@@ -1,0 +1,355 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,300);
+@import url('/fonts/noto/noto.css');
+
+html, button, input, select, textarea,
+.pure-g [class *= "pure-u"] {
+    /* Set your content font stack here: */
+    font-family: "Noto Sans", "Source Sans Pro", sans-serif;
+}
+
+html, body, .main-container, .main-app {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	-webkit-user-select: none; 
+	user-select: none;
+}
+
+ .main-app {
+ 	height: 90%;
+ }
+
+.ibvf {
+	width: 0;
+	height: 100%;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.rt-checkbox {
+	border-radius: 50%;
+	border: 1px solid #fff;
+	height: 25px;
+	width: 25px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.rt-checkbox[data-checked="true"] {
+	background-color: #fff;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+}
+
+li {
+	margin: 0;
+}
+
+.top-bar {
+	background-color: #323232;
+	height: 10%;
+}
+
+.top-bar .pure-g {
+    height: 100%;
+}
+
+.top-bar .fa {
+	color: #fff;
+}
+
+.top-bar .menu {
+	height: 100%;
+	padding: 19px 0;
+	text-align: left;
+	box-sizing: border-box;
+	padding: 0 0 0 20px;
+}
+
+.top-bar .menu .fa {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.top-bar .logo {
+	box-sizing: border-box;
+	padding: 10px 24px 10px 10px;
+    text-align: right;
+}
+
+.top-bar .logo img {
+	height: 100%;
+	width: 27%;
+}
+
+.top-bar .icons {
+	height: 100%;
+	text-align: right;
+	box-sizing: border-box;
+	padding: 0 20px 0 0;
+}
+
+.top-bar .icons .fa {
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0 0 0 20px;
+}
+
+
+.active-items {
+	background-color: #282828;
+	/*height: 40%;*/
+	height: 50%;
+	box-sizing: border-box;
+	padding: 5px 0;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.active-items ul li {
+	box-sizing: border-box;
+	padding: 5px;
+    	height: 45px; /* takes padding into account */
+}
+
+.active-items ul li .checkbox {
+	height: 100%;
+	text-align: center;
+}
+
+.active-items ul li .icon {
+	text-align: center;
+}
+
+.active-items ul li .icon-image {
+	max-height: 35px;
+	width: auto;
+}
+
+.active-items ul li .title {
+	height: 100%;
+}
+
+.active-items ul li .title span.title-text {
+	color: #fff;
+	display: inline-block;
+	font-size: 1.5em;
+	vertical-align: middle;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 90%;
+}
+
+.active-items ul li .drag-handle {
+	height: 100%;
+	text-align: center;
+}
+
+.active-items ul li .drag-handle .fa {
+	color: #464646;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.active-items ul li.highlight {
+	background-color: #464646;
+}
+
+.active-items ul li.highlight .drag-handle .fa {
+	color: #282828;
+}
+
+
+.control-panel {
+	background-color: #1e1e1e;
+	color: #fff;
+	height: 50%;
+	/*position: relative;*/
+	/*overflow: hidden;*/
+}
+
+.control-panel .drag-bar {
+	background-color: #323232;
+	height: 20%;
+	position: relative;
+}
+
+.control-panel .drag-bar .pure-u-1-1,
+.control-panel .drag-bar .pure-g {
+	height: 100%;
+}
+
+.control-panel .drag-bar .icon,
+.control-panel .drag-bar .title,
+.control-panel .drag-bar .close {
+	height: 100%;
+	text-align: center;
+}
+
+.control-panel .drag-bar .title {
+	font-size: 1.5em;
+	text-align: left;
+	text-transform: capitalize;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.control-panel .drag-bar .icon img,
+.control-panel .drag-bar .close .fa {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.control-panel .drag-bar .icon img {
+    width: 40px;
+    height: 40px;
+}
+
+.control-panel .active-controls {
+	box-sizing: border-box;
+	padding: 20px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	height: 80%;
+}
+
+.control-panel .active-controls.hide {
+	overflow-y: hidden;
+	overflow-x: hidden;
+	height: 0%;
+	padding: 0 20px;
+	transition: all 300ms;
+}
+
+.control-panel .active-controls label {
+	display: block;
+	letter-spacing: 0.5em;
+	text-transform: uppercase;
+	font-weight: 300;
+	margin: 15px 0 5px;
+}
+
+.control-panel .active-controls select {
+
+}
+
+.control-panel .active-controls .controls {
+	display: none;
+}
+
+.control-panel .active-controls .controls.show {
+	display: initial;
+}
+
+/* Gallery styles */
+
+.gallery-panel {
+	height: 0%;
+	overflow-y: hidden;
+	transition: all 300ms;
+	position: relative;
+}
+
+.gallery-panel.show {
+	height: 80%;
+	overflow-y: scroll;
+}
+
+.gallery-panel.showOverflow {
+	overflow-y: visible;	
+}
+
+.gallery-panel .gallery-item {
+	box-sizing: border-box;
+	padding: 1%;
+	position: relative;
+}
+
+.gallery-panel .gallery-item img {
+	max-width: 100%;
+	height: auto;
+}
+
+
+.gallery-item .gallery-item-inner {
+	width: 100%;
+	height: 100%;
+	background-color: black;
+}
+
+.gallery-item .add-panel {
+	pointer-events: none;
+	position: absolute;
+	top: -60px;
+	left: 0;
+	width: 100%;
+	height: 60px;
+	background-color: #777;
+	text-align: center;
+	transition: all 300ms;
+	transform: translateY(20px);
+	opacity: 0;
+	border-radius: 4px;
+	padding: 15px 0 0 0;
+	box-sizing: border-box;
+}
+
+.add-panel:after {
+	position: absolute;
+	bottom: -17px;
+	left: 36%;
+	content: '';
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 17.3px 10px 0 10px;
+	border-color: #777 transparent transparent transparent;
+}
+
+.add-panel.show {
+	pointer-events: all;
+	opacity: 1;
+	transform: translateY(0px);
+}
+
+/* Input styles */
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+/* Special styling for WebKit/Blink */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+  margin-top: -12px;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background-color: #fff;
+}

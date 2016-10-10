@@ -221,23 +221,10 @@ modV.prototype.Layer = class Layer {
 					// Cloned element
 					let clone = gallery.querySelector('.gallery-item[data-module-name="' + itemEl.dataset.moduleName + '"]');
 
-					// Get Module
-					let oldModule = modV.registeredMods[replaceAll(itemEl.dataset.moduleName, '-', ' ')];
-
-					let Module = modV.createModule(oldModule);
-
-					if(evt.originalEvent.shiftKey) {
-						Module.info.solo = true;
-					}
+					let activeItemNode = this.buildModule(replaceAll(itemEl.dataset.moduleName, '-', ' '), evt.newIndex, true);
 
 					// Move back to gallery
 					swapElements(clone, itemEl);
-
-					let activeItemNode = modV.createActiveListItem(Module, function(node) {
-						modV.currentActiveDrag = node;
-					}, function() {
-						modV.currentActiveDrag  = null;
-					});
 
 					// Replace clone
 					try {
@@ -249,18 +236,6 @@ modV.prototype.Layer = class Layer {
 
 						return;
 					}
-
-					// Add to active registry
-					modV.activeModules[Module.info.name] = Module;
-
-					// Set Module's layer
-					Module.setLayer(modV.layers.indexOf(this));
-
-					// Add to layer
-					this.addModule(Module, evt.newIndex);
-
-					// Create controls
-					modV.createControls(Module);
 
 					activeItemNode.focus();
 				} else if(itemEl.classList.contains('active-item')) {
@@ -302,6 +277,42 @@ modV.prototype.Layer = class Layer {
 				}
 			}
 		});
+	}
+
+	buildModule(moduleName, moduleIndex, doReturn) {
+		let modV = this.modV;
+
+		// Get Module
+		let oldModule = modV.registeredMods[moduleName];
+
+		let Module = modV.createModule(oldModule);
+
+		// if(evt.originalEvent.shiftKey) {
+		// 	Module.info.solo = true;
+		// }
+
+		let activeItemNode = modV.createActiveListItem(Module, function(node) {
+			modV.currentActiveDrag = node;
+		}, function() {
+			modV.currentActiveDrag  = null;
+		});
+
+		// Add to active registry
+		modV.activeModules[Module.info.name] = Module;
+
+		// Set Module's layer
+		Module.setLayer(modV.layers.indexOf(this));
+
+		// Add to layer
+		this.addModule(Module, moduleIndex);
+
+		// Create controls
+		modV.createControls(Module);
+
+		if(doReturn) return activeItemNode;
+		else {
+			this.moduleListNode.insertBefore(activeItemNode, this.moduleListNode.children[moduleIndex]);
+		}
 	}
 
 };

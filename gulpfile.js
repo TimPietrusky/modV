@@ -21,7 +21,7 @@ const exec = require('child_process').exec;
 
 const NwBuilder = require('nw-builder');
 
-var allSources = ['./src/**/*.js', './**/*.ejs', './modules/**/*.js', './modules/**/*.html', './*.html']; // , './**/*.css'
+var allSources = ['./src/**/*.js', './**/*.ejs', './modules/**/*.js', './modules/**/*.html', './*.html', './remote/**/*']; // , './**/*.css'
 
 gulp.task('clean', function() {
 	return gulp.src('./dist', {read: false})
@@ -50,6 +50,16 @@ gulp.task('webpack', ['clean', 'lint'], function() {
 		.pipe(gulp.dest('./dist/'));
 });
 
+gulp.task('webpack:remote', ['clean'/*, 'lint:remote'*/], function() {
+	return gulp.src('./remote/src/**/*.js')
+		.pipe(webpack({
+			output: {
+				filename: 'app.js'
+			}
+		}))
+		.pipe(gulp.dest('./dist/remote/'));
+});
+
 gulp.task('copy:modules', ['clean'], function() {
 	return gulp.src('./modules/**/*', {base: './'})
 		.pipe(gulp.dest('dist'));
@@ -61,7 +71,7 @@ gulp.task('copy:html', ['clean'], function() {
 });
 
 gulp.task('copy:css', ['clean'], function() {
-	return gulp.src('./*.css', {base: './'})
+	return gulp.src(['./*.css', './remote/*.css'], {base: './'})
 		.pipe(gulp.dest('dist'));
 });
 
@@ -123,7 +133,7 @@ gulp.task('symlink', ['clean'], function() {
 });
 
 gulp.task('ejs', ['clean'], function() {
-	return gulp.src('./*.ejs', {base: './'})
+	return gulp.src(['./*.ejs', './remote/*.ejs'], {base: './'})
 		.pipe(ejs({nwjs: false}, {
 			ext: '.html'
 		}))
@@ -131,7 +141,7 @@ gulp.task('ejs', ['clean'], function() {
 });
 
 gulp.task('ejs:nwjs', ['clean'], function() {
-	return gulp.src('./*.ejs', {base: './'})
+	return gulp.src(['./*.ejs', './remote/*.ejs'], {base: './'})
 		.pipe(ejs({nwjs: true}, {
 			ext: '.html'
 		}))
@@ -145,7 +155,20 @@ gulp.task('media-manager', ['set-watcher'], function(cb) {
 	});
 
 	mediaManager.stdout.on('data', function(data) {
-	    console.log(data.toString()); 
+	    console.log('MEDIA MANAGER:', data.toString()); 
+	});
+
+	//return run('node ./mediaManager.js').exec();
+});
+
+gulp.task('remote', ['set-watcher'], function(cb) {
+
+	var remote = exec('node ./RemoteServer.js', function(err) {
+		if(err) cb(err);
+	});
+
+	remote.stdout.on('data', function(data) {
+	    console.log('REMOTE SERVER:', data.toString()); 
 	});
 
 	//return run('node ./mediaManager.js').exec();
@@ -160,7 +183,7 @@ gulp.task('connect', function() {
 });
 
 gulp.task('reload', ['build'], function() {
-	gulp.src(allSources)
+	gulp.src(['./**/*.html'])
     	.pipe(connect.reload());
 });
 
@@ -172,7 +195,7 @@ gulp.task('set-watcher', ['build'], function() {
 	});
 	
 	console.log('Watching', sources);
-	gulp.watch(allSources, ['build', 'reload']);
+	gulp.watch(allSources, ['reload']);
 });
 
 gulp.task('nwjs', ['clean', 'ejs:nwjs', 'webpack', 'copy', 'copy:nwjs:include', 'copy:nwjs:package', 'copy:nwjs:mediamanager', 'copy:nwjs:mediamanagermodules', 'clean:nwjs'], function(cb) {
@@ -197,10 +220,10 @@ gulp.task('nwjs', ['clean', 'ejs:nwjs', 'webpack', 'copy', 'copy:nwjs:include', 
 
 gulp.task('copy', ['copy:modules', 'copy:html', 'copy:css', 'copy:library', 'copy:meyda', 'copy:fonts', 'copy:license']);
 
-gulp.task('build', ['clean', 'ejs', 'webpack', 'copy', 'symlink']);
+gulp.task('build', ['clean', 'ejs', 'webpack', 'webpack:remote', 'copy', 'symlink']);
 
 gulp.task('build-nwjs', ['clean', 'ejs:nwjs', 'webpack', 'copy', 'nwjs']);
 
-gulp.task('watch', ['build', 'connect', 'set-watcher', 'media-manager']);
+gulp.task('watch', ['build', 'connect', 'set-watcher', 'media-manager', 'remote']);
 
 gulp.task('watch-only', ['build', 'connect', 'set-watcher']);

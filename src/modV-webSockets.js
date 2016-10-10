@@ -27,9 +27,11 @@
 
 		remote.onmessage = e => {
 			var data = JSON.parse(e.data);
+			let payload;
 			console.log('Remote sent', data);
 					
 			if(!('type' in data)) return false;
+			if('payload' in data) payload = data.payload;
 					
 			switch(data.type) {
 				case 'hello':
@@ -42,6 +44,14 @@
 
 					this.remote.sendCurrent();
 
+					break;
+
+				case 'addModule':
+					let name = payload.name;
+					let layerIndex = payload.layerIndex;
+					let Layer = this.layers[layerIndex];
+
+					Layer.buildModule(name, 0);
 					break;
 			}
 		};

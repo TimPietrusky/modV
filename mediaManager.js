@@ -9,7 +9,11 @@ const ws = require('nodejs-websocket'),
 	animated = require('animated-gif-detector'),
 	ffmpeg = require('fluent-ffmpeg'),
 	watch = require('node-watch'),
-	open = require("open");
+	open = require('open'), //jshint ignore:line
+	myip = require('quick-local-ip'),
+	colors = require('colors/safe');
+
+const IP = myip.getLocalIP4();
 
 var isWin = /^win/.test(process.platform);
 var pathSeparator = "/";
@@ -275,7 +279,8 @@ createDirectories(function() {
 	mediaSearch(function() {
 		server.listen(port, function() {
 
-			console.log('modV Media Manager listening on port', port);
+			console.log(colors.red.underline('modV Media Manager listening on port'), colors.red.underline(port));
+			console.log(colors.red.underline('This computer\'s IP is'), colors.red.underline(IP));
 			console.log('Watching ./media/ for changes...');
 
 			watch('./media/', { recursive: true, followSymLinks: true }, function(filepath) {

@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>modV Remote</title>
+		<meta name="viewport"  content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+		<link rel="stylesheet" href="./styles.css">
+		<!-- <link rel="import" href="templates.html"> -->
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	</head>
+	<body>
+		<div class="pure-g main-container">
+			<div class="pure-u-1-1 top-bar">
+				<div class="pure-g">
+					<div class="pure-u-1-5 menu">
+						<i class="fa fa-bars fa-2x"></i>
+						<span class="ibvf"></span>
+					</div>
+					<div class="pure-u-2-5 logo">
+						<img src="./images/retrace.png">
+					</div>
+					<div class="pure-u-2-5 icons">
+						<i class="fa fa-globe fa-2x global"></i>
+						<i class="fa fa-plus fa-2x"></i>
+						<span class="ibvf"></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="main-app app-panel pure-g">
+				<div class="pure-u-1-1 active-items">
+					<ul class="active-items-list">
+						<!-- <li class="pure-g highlight" data-effect="waveform">
+							<div class="pure-u-1-8 checkbox">
+								<div class="rt-checkbox" data-checked="false"></div>
+								<span class="ibvf"></span>
+							</div>
+							<div class="pure-u-5-24 icon">
+								<img src="./images/waveform.png" width="60" height="60">
+							</div>
+							<div class="pure-u-13-24 title">
+								<span class="title-text">Waveform</span>
+								<span class="ibvf"></span>
+							</div>
+							<div class="pure-u-1-12 drag-handle">
+								<i class="fa fa-bars fa-2x"></i>
+								<span class="ibvf"></span>
+							</div>
+						</li>
+						<li class="pure-g" data-effect="balls">
+							<div class="pure-u-1-8 checkbox">
+								<div class="rt-checkbox" data-checked="false"></div>
+								<span class="ibvf"></span>
+							</div>
+							<div class="pure-u-5-24 icon">
+								<img src="./images/balls.png" width="60" height="60">
+							</div>
+							<div class="pure-u-13-24 title">
+								<span class="title-text">Balls</span>
+								<span class="ibvf"></span>
+							</div>
+							<div class="pure-u-1-12 drag-handle">
+								<i class="fa fa-bars fa-2x"></i>
+								<span class="ibvf"></span>
+							</div>
+						</li> -->
+					</ul>
+				</div>
+
+				<div class="pure-u-1-1 control-panel">
+
+					<div class="gallery-panel app-panel pure-g show">
+						<div class="pure-u-1-1">
+							<div class="pure-g gallery-inner">
+
+							</div>
+						</div>
+					</div>
+					
+					<div class="pure-g drag-bar">
+						<div class="pure-u-1-1">
+							<div class="pure-g">
+								<div class="pure-u-1-5 icon">
+									
+									<span class="ibvf"></span>
+								</div>
+								<div class="pure-u-3-5 title">
+									<span class="title-text"></span>
+									<span class="ibvf"></span>
+								</div>
+								<div class="pure-u-1-5 close">
+									<i class="fa panel-button fa-caret-up fa-2x"></i>
+									<span class="ibvf"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="active-controls hide">
+
+						<!-- <div class="pure-g controls waveform-controls show">
+							<div class="pure-u-1-1">
+								<label>Opacity</label>
+								<input type="range" value="1" min="0" max="1" step="0.02" class="waveform-opacity">
+								<label>Blending</label>
+								<select class="waveform-blending">
+									<option value="source-over">Normal</option>
+									<option value="openVG-multiply">Multiply</option>
+									<option value="openVG-screen">Screen</option>
+									<option value="openVG-darker">Darker</option>
+									<option value="openVG-additive">Additive</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="pure-g controls balls-controls">
+							<div class="pure-u-1-1">
+								<label>Amount</label>
+								<input type="range" value="10" min="1" max="30" class="balls-amount">
+								<label>Opacity</label>
+								<input type="range" value="1" min="0" max="1" step="0.02" class="balls-opacity">
+								<label>Amplification Size</label>
+								<input type="range" value="1" min="0" max="5" step="0.01" class="balls-basesize">
+								<label>Blending</label>
+								<select class="balls-blending">
+									<option value="source-over">Normal</option>
+									<option value="openVG-multiply">Multiply</option>
+									<option value="openVG-screen">Screen</option>
+									<option value="openVG-darker">Darker</option>
+									<option value="openVG-additive">Additive</option>
+								</select>
+								
+							</div>
+						</div> -->
+
+						<div class="pure-g controls global-controls">
+							<div class="pure-u-1-1">
+								<button class="pure-button clearing-enable">Clearing Enable</button>
+								<label>Background Colour</label>
+								<input type="color" value="black" class="global-backgroundcolour">
+								<label>Background Opacity</label>
+								<input type="range" value="0.07" min="0" max="1" step="0.01" class="global-backgroundopacity rt-colour">
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="templates">
+
+			<template id="gallery-item">
+				<div class="pure-u-1-5 gallery-item">
+					<div class="gallery-item-inner title">
+						<img src="">
+					</div>
+					<div class="add-panel">
+						<i class="fa fa-plus fa-2x"></i>
+					</div>
+				</div>
+			</template>
+
+			<template id="control-panel">
+				<div class="pure-g controls">
+					<div class="pure-u-1-1 controls-inner">
+						
+					</div>
+				</div>
+			</template>
+
+			<template id="active-item">
+				<li class="pure-g">
+					<div class="pure-u-1-8 checkbox">
+						<div class="rt-checkbox" data-checked="false"></div>
+						<span class="ibvf"></span>
+					</div>
+					<div class="pure-u-5-24 icon">
+						<img class="icon-image" src="">
+					</div>
+					<div class="pure-u-13-24 title">
+						<span class="title-text"></span>
+						<span class="ibvf"></span>
+					</div>
+					<div class="pure-u-1-12 drag-handle">
+						<i class="fa fa-bars fa-2x"></i>
+						<span class="ibvf"></span>
+					</div>
+				</li>
+			</template>
+
+		</div>
+		<script src="./app.js"></script>
+		<script>
+			var Remote = new Remote();
+		</script>
+	</body>
+</html>

@@ -5,7 +5,7 @@
 	var drunkenMess = function() {
 		return 'You sure about that, you drunken mess?';
 	};
-	window.onbeforeunload = drunkenMess;
+	//window.onbeforeunload = drunkenMess;
 
 	// Creates Preview Window
 	// > must be bound to modV's scope
@@ -22,7 +22,7 @@
 		
 		canvas.style.top = canvas.style.bottom = canvas.style.left = canvas.style.right = 0;
 
-		pWindow.onbeforeunload = drunkenMess;
+		//pWindow.onbeforeunload = drunkenMess;
 
 		pWindow.addEventListener('resize', function() {
 
