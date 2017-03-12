@@ -48,12 +48,6 @@ class nerdV { // jshint ignore:line
 		this.height = height;
 	}
 
-	setFog(fogValue) {
-		console.log('setFog', fogValue);
-		if(fogValue) this.fog = 255;
-		else this.fog = 0; 
-	}
-
 	drawFrame(canvas, ctx, pixelBuffer) {
 
 		//console.log(pixelBuffer);
@@ -120,24 +114,24 @@ class nerdV { // jshint ignore:line
 			rgb[1] += data[i+1];
 			rgb[2] += data[i+2];
 		}
-		
+
 		// ~~ used to floor values
 		rgb[0] = ~~(rgb[0]/avCount); //jshint ignore:line
 		rgb[1] = ~~(rgb[1]/avCount); //jshint ignore:line
 		rgb[2] = ~~(rgb[2]/avCount); //jshint ignore:line
 
-		let DMXArray = [
-			rgb[0],
-			rgb[1],
-			rgb[2],
-			rgb[0],
-			rgb[1],
-			rgb[2],
-			this.fog
-		];
+		let dmxData = {
+			_type : 'modV',
+
+			// Average color of all colors
+			average : rgb,
+
+			// Specific colors grabbed from canvas
+			colors : packet
+		}
 
 		if(this.LEDsocket.readyState === 1) this.LEDsocket.send(JSON.stringify(packet));
-		if(this.DMXsocket.readyState === 1) this.DMXsocket.send(JSON.stringify(DMXArray));
+		if(this.DMXsocket.readyState === 1) this.DMXsocket.send(JSON.stringify(dmxData));
 	}
 
 }
