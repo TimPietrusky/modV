@@ -36,10 +36,6 @@ onmessage = function(e) { //jshint ignore:line
         case 'data':
             process(message.payload);
         break;
-
-        case 'fog':
-        	nerdVI.setFog(message.payload);
-        break;
 	}
 };
 

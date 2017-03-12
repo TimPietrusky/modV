@@ -12,16 +12,6 @@ class GrabCanvas extends modV.ModuleScript {
 			}
 		});
 
-		this.add(new modV.ButtonControl({
-			label: 'Fog',
-			onpress: () => {
-				this.setFog(true);
-			},
-			onrelease: () => {
-				this.setFog(false);
-			}
-		}));
-
 		this.divsor = 4;
 	}
 
@@ -76,7 +66,7 @@ class GrabCanvas extends modV.ModuleScript {
 
 		//var pixels = new Uint8Array(_gl.drawingBufferWidth * _gl.drawingBufferHeight * 4);
 		//_gl.readPixels(0, 0, _gl.drawingBufferWidth, _gl.drawingBufferHeight, _gl.RGBA, _gl.UNSIGNED_BYTE, pixels);
-		
+
 		//var pixels = new Uint8Array(canvas.width * canvas.height * 4);
 
 		//this.internalContext.drawImage(canvas, 0, 0);
@@ -100,9 +90,6 @@ class GrabCanvas extends modV.ModuleScript {
 		this.worker.postMessage({type: 'data', payload: pixels});
 	}
 
-	setFog(value) {
-		this.worker.postMessage({type: 'fog', payload: value});
-	}
 }
 
 modV.register(GrabCanvas);
