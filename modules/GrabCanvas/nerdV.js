@@ -1,137 +1,143 @@
 class LED { // jshint ignore:line
 
-	constructor(x, y) {
-		this.x = x;
-		this.y = y;
-	}
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
 
 }
 
 class nerdV { // jshint ignore:line
 
-	constructor(LEDSocketAddress, DMXSocketAddress) {
-		this.setupSocket(LEDSocketAddress, DMXSocketAddress);
+  constructor(LEDSocketAddress, DMXSocketAddress) {
+    this.setupSocket(LEDSocketAddress, DMXSocketAddress);
 
-		this.reset();
-		this.devicePixelRatio = 1;
-		this.fog = 0;
-	}
+    this.reset();
+    this.devicePixelRatio = 1;
+    this.fog = 0;
+  }
 
-	setupSocket(lsa, dsa) {
-		this.LEDsocket = new WebSocket(lsa);
-		this.LEDsocket.onerror = error => {
-			console.error('nerdV: LED WebSocket: Error:', error);
-		};
-		this.LEDsocket.onopen = () => {
-			console.info('nerdV: LED WebSocket: Opened');
-		};
+  setupSocket(lsa, dsa) {
+    // this.LEDsocket = new WebSocket(lsa);
+    // this.LEDsocket.onerror = error => {
+    //   console.error('nerdV: LED WebSocket: Error:', error);
+    // };
+    // this.LEDsocket.onopen = () => {
+    //   console.info('nerdV: LED WebSocket: Opened');
+    // };
 
-		this.DMXsocket = new WebSocket(dsa);
-		this.DMXsocket.onerror = error => {
-			console.error('nerdV: DMX WebSocket: Error:', error);
-		};
-		this.DMXsocket.onopen = () => {
-			console.info('nerdV: DMX WebSocket: Opened');
-		};
-	}
+    this.DMXsocket = new WebSocket(dsa);
+    this.DMXsocket.onerror = error => {
+      console.error('nerdV: DMX WebSocket: Error:', error);
+    };
+    this.DMXsocket.onopen = () => {
+      console.info('nerdV: DMX WebSocket: Opened');
+    };
+  }
 
-	reset() {
-		this.LEDs = [];
-	}
+  reset() {
+    this.LEDs = [];
+  }
 
-	addLED(LED) {
-		this.LEDs.push(LED);
-	}
+  addLED(LED) {
+    this.LEDs.push(LED);
+  }
 
-	setDimensions(width, height) {
-		this.width = width;
-		this.height = height;
-	}
+  setDimensions(width, height) {
+    this.width = width;
+    this.height = height;
+  }
 
-	drawFrame(canvas, ctx, pixelBuffer) {
+  setFog(fogValue) {
+    console.log('setFog', fogValue);
+    if (fogValue) this.fog = 255;
+    else this.fog = 0;
+  }
 
-		//console.log(pixelBuffer);
+  drawFrame(canvas, ctx, pixelBuffer) {
 
-		// if (this.pixelLocationsRed === null) {
-		// 	// No pixels defined yet
-		// 	console.warn('nerdV: drawFrame: No pixels defined');
-		// 	return;
-		// }
+    //console.log(pixelBuffer);
 
-		// Dest position in our packet. Start right after the header.
-		let dest = 0;
+    // if (this.pixelLocationsRed === null) {
+    // 	// No pixels defined yet
+    // 	console.warn('nerdV: drawFrame: No pixels defined');
+    // 	return;
+    // }
 
-		let packet = new Array(dest + this.LEDs.length * 3);
+    // Dest position in our packet. Start right after the header.
+    let dest = 0;
 
-		// if (this.LEDsocket.readyState !== 1 /* OPEN */ ) {
-		// 	// The server connection isn't open. Nothing to do.
-		// 	console.warn('nerdV: drawFrame: Unable to send frame - no WebSocket connection');
-		// 	return;
-		// }
+    let packet = new Array(dest + this.LEDs.length * 3);
 
-		// if (this.LEDsocket.bufferedAmount > packet.length) {
-		// 	// The network is lagging, and we still haven't sent the previous frame.
-		// 	// Don't flood the network, it will just make us laggy.
-		// 	// If fcserver is running on the same computer, it should always be able
-		// 	// to keep up with the frames we send, so we shouldn't reach this point.
-		// 	console.warn('nerdV: drawFrame: Unable to send frame - network lag?');
-		// 	return;
-		// }
+    // if (this.LEDsocket.readyState !== 1 /* OPEN */ ) {
+    // 	// The server connection isn't open. Nothing to do.
+    // 	console.warn('nerdV: drawFrame: Unable to send frame - no WebSocket connection');
+    // 	return;
+    // }
 
-		// Sample and send the center pixel of each LED
-		for (let led = 0; led < this.LEDs.length; led++) {
+    // if (this.LEDsocket.bufferedAmount > packet.length) {
+    // 	// The network is lagging, and we still haven't sent the previous frame.
+    // 	// Don't flood the network, it will just make us laggy.
+    // 	// If fcserver is running on the same computer, it should always be able
+    // 	// to keep up with the frames we send, so we shouldn't reach this point.
+    // 	console.warn('nerdV: drawFrame: Unable to send frame - network lag?');
+    // 	return;
+    // }
 
-			// Calculate the source position in imageData.
-			// First, we find a vector relative to the LED bounding box corner.
-			// Then we need to calculate the offset into the imageData array.
-			// We need to do this with integer math (|0 coerces to integer quickly).
-			// Also, note that imageData uses 4 bytes per pixel instead of 3.
+    // Sample and send the center pixel of each LED
+    for (let led = 0; led < this.LEDs.length; led++) {
 
-			let x = this.LEDs[led].x /*- this.LEDs[0].x*/;
-			let y = this.LEDs[led].y /*- this.LEDs[0].y*/;
+      // Calculate the source position in imageData.
+      // First, we find a vector relative to the LED bounding box corner.
+      // Then we need to calculate the offset into the imageData array.
+      // We need to do this with integer math (|0 coerces to integer quickly).
+      // Also, note that imageData uses 4 bytes per pixel instead of 3.
 
-			var src = 4 * (Math.floor(x) + Math.floor(y) * this.width); //jshint ignore:line
+      let x = this.LEDs[led].x /*- this.LEDs[0].x*/ ;
+      let y = this.LEDs[led].y /*- this.LEDs[0].y*/ ;
 
-			// Copy three bytes to our OPC packet, for Red, Green, and Blue
-			packet[dest++] = pixelBuffer[src++];
-			packet[dest++] = pixelBuffer[src++];
-			packet[dest++] = pixelBuffer[src++];
-		}
+      var src = 4 * (Math.floor(x) + Math.floor(y) * this.width); //jshint ignore:line
 
-		let blockSize = 2;
+      // Copy three bytes to our OPC packet, for Red, Green, and Blue
+      packet[dest++] = pixelBuffer[src++];
+      packet[dest++] = pixelBuffer[src++];
+      packet[dest++] = pixelBuffer[src++];
+    }
 
-		let avCount = 0;
-		let i = -4;
-		let rgb = [0, 0, 0];
+    let blockSize = 2;
 
-		let data = pixelBuffer;
+    let avCount = 0;
+    let i = -4;
+    let rgb = [0, 0, 0];
 
-		let length = data.length;
+    let data = pixelBuffer;
 
-		while ( (i += blockSize * 4) < length ) {
-			++avCount;
-			rgb[0] += data[i];
-			rgb[1] += data[i+1];
-			rgb[2] += data[i+2];
-		}
+    let length = data.length;
 
-		// ~~ used to floor values
-		rgb[0] = ~~(rgb[0]/avCount); //jshint ignore:line
-		rgb[1] = ~~(rgb[1]/avCount); //jshint ignore:line
-		rgb[2] = ~~(rgb[2]/avCount); //jshint ignore:line
+    while ((i += blockSize * 4) < length) {
+      ++avCount;
+      rgb[0] += data[i];
+      rgb[1] += data[i + 1];
+      rgb[2] += data[i + 2];
+    }
 
-		let dmxData = {
-			_type : 'modV',
+    // ~~ used to floor values
+    rgb[0] = ~~(rgb[0] / avCount); //jshint ignore:line
+    rgb[1] = ~~(rgb[1] / avCount); //jshint ignore:line
+    rgb[2] = ~~(rgb[2] / avCount); //jshint ignore:line
 
-			// Average color of all colors
-			average : rgb,
+    let dmxData = {
+      _type: 'modV',
 
-			// Specific colors grabbed from canvas
-			colors : packet
-		}
+      // Average color of all colors
+      average: rgb,
 
-		if(this.LEDsocket.readyState === 1) this.LEDsocket.send(JSON.stringify(packet));
-		if(this.DMXsocket.readyState === 1) this.DMXsocket.send(JSON.stringify(dmxData));
-	}
+      // Specific colors grabbed from canvas
+      colors: packet
+    }
+
+    // if (this.LEDsocket.readyState === 1) this.LEDsocket.send(JSON.stringify(packet));
+    if (this.DMXsocket.readyState === 1) this.DMXsocket.send(JSON.stringify(dmxData));
+  }
 
 }

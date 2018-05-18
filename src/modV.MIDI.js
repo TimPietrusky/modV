@@ -30,19 +30,27 @@ modV.prototype.MIDI = class {
 		let inputs = this.inputs;
 		let outputs = this.outputs;
 
-		// [TimPietrusky] Handle output channels
-		/*
-		 * I'm doing this so I can get the called output channel for the specific device when I
-		 * turn on / off the button lights.
-		 * Is there a better way to do it? I SURE HOPE SO!
-		 * You are the last hope of the earth as we know it!
-		 *
-		 * Sam... SAM? SAAAAAAAAAAAAAAAAM!!!
-		 */
 		this.superOutputs = {};
+
+
 		for (let output of outputs.values()) {
 			this.superOutputs[output.name] = output;
+
+			// Turn all button lights off
+			if (output.name === 'MIDI Mix' || output.name === 'Launch Control XL') {
+
+				for (let i = 0; i < 128; i++) {
+					//output.send([ 0x90, i, 0 ]);
+				}
+			}
 		}
+
+		//let buttons = [1, 4, 7, 10, 13, 16, 19, 22, 3, 6, 9, 12, 15, 18, 21, 24];
+
+		/*buttons.forEach(function(element) {
+			// Turn of lights
+
+		}.bind(this));*/
 
 		// loop over all available inputs and listen for any MIDI input
 		for (let input of inputs.values()) {
@@ -115,11 +123,11 @@ modV.prototype.MIDI = class {
 								modV.activeModules[moduleName].info[controlKey.substring(this.reservedKey.length)] = !Control.node.checked;
 							}
 
-							// [TimPietrusky] Turn on the button light
+							// Light up button
 							if (Control.node.checked) {
 								this.superOutputs[message.currentTarget.name].send([ 0x90, data[1], 0x7f ]);
 
-							// [TimPietrusky] Turn off the button light
+							// Shut down button
 							} else {
 								this.superOutputs[message.currentTarget.name].send([ 0x90, data[1], 0x00 ]);
 							}
