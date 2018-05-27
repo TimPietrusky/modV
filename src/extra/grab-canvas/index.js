@@ -1,4 +1,8 @@
+import store from '@/../store';
 import { modV } from 'modv';
+import controlPanelComponent from './ControlPanel';
+import grabCanvasStore from './store';
+
 
 const Worker = require('worker-loader!./worker.js'); //eslint-disable-line
 
@@ -13,30 +17,19 @@ const Worker = require('worker-loader!./worker.js'); //eslint-disable-line
  * @param{number} selectionX - Amount of areas we select on the x-axis
  * @param{number} selectionY - Amount of areas we select on the y-axis
  */
-class GrabCanvas {
-  constructor(args = {}) {
-    this.worker = new Worker();
+const theWorker = new Worker();
 
-    this.store = null;
-    this.vue = null;
-    this.delta = 0;
+// Small version of the output canvas
+const smallCanvas = document.createElement('canvas');
+const smallContext = smallCanvas.getContext('2d');
 
-    // Small version of the output canvas
-    this.smallCanvas = document.createElement('canvas');
-    this.smallContext = this.smallCanvas.getContext('2d');
+// Add the canvas to modV for testing purposes :D
+smallCanvas.style = 'position: absolute; top: 0px; right: 0px; width: 80px; height: 80px; z-index: 100000;';
+document.body.appendChild(smallCanvas);
 
-    // Set the size of the smallCanvas
-    this.smallCanvas.width = args.width || 240;
-    this.smallCanvas.height = args.height || 240;
-
-    // Set the amount of the selected areas per axis
-    this.selectionX = args.selectionX || 4;
-    this.selectionY = args.selectionY || 4;
-
-    // Add the canvas to modV for testing purposes :D
-    this.smallCanvas.style = 'position: absolute; top: 0px; right: 0px; width: 80px; height: 80px; z-index: 100000;';
-    document.body.appendChild(this.smallCanvas);
-  }
+const grabCanvas = {
+  name: 'Grab Canvas',
+  controlPanelComponent,
 
   /**
    * When the canvas is resized: Update the worker.
@@ -46,26 +39,36 @@ class GrabCanvas {
   resize(canvas) {
     if (!canvas) return;
 
-    this.worker.postMessage({
+    theWorker.postMessage({
       type: 'setup',
       payload: {
-        width: this.smallCanvas.width,
-        height: this.smallCanvas.height,
-        selectionX: this.selectionX,
-        selectionY: this.selectionY,
+        width: smallCanvas.width,
+        height: smallCanvas.height,
+        selectionX: store.getters['grabCanvas/selectionX'],
+        selectionY: store.getters['grabCanvas/selectionY'],
       },
     });
-  }
+  },
 
   /**
    * Only called when added as a Vue plugin,
    * this must be registered with vue before modV
    * to use vuex or vue
    */
-  install(Vue, { store }) {
-    if (!store) throw new Error('No Vuex store detected');
-    this.store = store;
-    this.vue = Vue;
+  install(Vue, args = {}) {
+    Vue.component(controlPanelComponent.name, controlPanelComponent);
+
+    store.registerModule('grabCanvas', grabCanvasStore);
+
+    // Set the size of the smallCanvas
+    smallCanvas.width = args.width || 240;
+    smallCanvas.height = args.height || 240;
+
+    // Set the amount of the selected areas per axis
+    store.commit('grabCanvas/setSelection', {
+      selectionX: args.selectionX || 4,
+      selectionY: args.selectionY || 4,
+    });
 
     store.subscribe((mutation) => {
       if (mutation.type === 'windows/setSize') {
@@ -73,60 +76,51 @@ class GrabCanvas {
           width: mutation.payload.width,
           height: mutation.payload.height,
         });
+      } else if (mutation.type === 'grabCanvas/setSelection') {
+        theWorker.postMessage({
+          type: 'setup',
+          payload: {
+            width: smallCanvas.width,
+            height: smallCanvas.height,
+            selectionX: mutation.payload.selectionX || store.getters['grabCanvas/selectionX'],
+            selectionY: mutation.payload.selectionY || store.getters['grabCanvas/selectionY'],
+          },
+        });
       }
     });
-  }
+  },
 
   /**
    * Only called when added to modV.
    */
-  modvInstall() { //eslint-disable-line
+  modvInstall() {
     this.resize(modV.outputCanvas);
-  }
-
-  /**
-   * Called once every frame.
-   * Useful for plugins which need to process data away from modV
-   */
-  process({ delta }) {
-    this.delta = delta;
-  }
-
-  /**
-   * Called once every frame.
-   * Allows access of each value of every active Module.
-   * (see expression plugin for an example)
-   */
-  processValue({ currentValue, moduleName, controlVariable }) { //eslint-disable-line
-  }
+  },
 
   /**
    * Called once every frame.
    * Allows access of each frame drawn to the screen.
    *
    * @param{Object} canvas - The modV output canvas
-   * @param{Object} context - The modV output context
    */
-  processFrame({ canvas, context }) { //eslint-disable-line
-
+  processFrame({ canvas }) {
     // Clear the output
-    this.smallContext.clearRect(0, 0, this.smallCanvas.width, this.smallCanvas.height);
+    smallContext.clearRect(0, 0, smallCanvas.width, smallCanvas.height);
 
     // Create a small version of the canvas
-    this.smallContext.drawImage(canvas, 0, 0, this.smallCanvas.width, this.smallCanvas.height);
+    smallContext.drawImage(canvas, 0, 0, smallCanvas.width, smallCanvas.height);
 
     // Get the pixels from the small canvas
     const data =
-      this.smallContext.getImageData(0, 0, this.smallCanvas.width, this.smallCanvas.height).data;
+      smallContext.getImageData(0, 0, smallCanvas.width, smallCanvas.height).data;
 
     // Send the data to the worker
-    this.worker.postMessage({
+    theWorker.postMessage({
+
       type: 'data',
       payload: data,
     });
-  }
-}
-
-const grabCanvas = new GrabCanvas();
+  },
+};
 
 export default grabCanvas;

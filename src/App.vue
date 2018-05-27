@@ -38,12 +38,12 @@
     </section>
     <canvas-preview></canvas-preview>
     <side-menu :menuState='menuOpen'></side-menu>
+    <status-bar></status-bar>
     <component
       v-for="pluginComponent in pluginComponents"
       :is="pluginComponent"
       :key="pluginComponent"
     ></component>
-    <status-bar></status-bar>
   </div>
 </template>
 
@@ -59,7 +59,7 @@
   import StatusBar from '@/components/StatusBar';
   import Tabs from '@/components/Tabs';
 
-  import { modV } from 'modv';
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'app',
@@ -69,10 +69,13 @@
       };
     },
     computed: {
+      ...mapGetters('plugins', [
+        'enabledPlugins',
+      ]),
       pluginComponents() {
-        return modV.plugins
-          .filter(plugin => 'component' in plugin)
-          .map(plugin => plugin.component.name);
+        return this.enabledPlugins
+          .filter(plugin => 'component' in plugin.plugin)
+          .map(plugin => plugin.plugin.component.name);
       },
     },
     methods: {
@@ -176,7 +179,7 @@
   }
 
   .vb > .vb-dragger {
-    z-index: 5;
+    // z-index: 5;
     width: 12px;
     right: 0;
     text-align: center;

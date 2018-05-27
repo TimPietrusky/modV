@@ -7,11 +7,10 @@
         collapsed: collapsed
       }"
       @click="focusLayer"
-      v-context-menu="menuOptions"
     >
     <div class="columns is-gapless is-multiline is-mobile">
       <div class="column is-12">
-        <div class="control-bar handle columns is-gapless is-mobile">
+        <div class="control-bar handle columns is-gapless is-mobile" v-context-menu="menuOptions">
           <div class="column is-three-quarters">
             <div class="layer-title" @dblclick="startNameEdit" @keydown.enter="stopNameEdit">{{ name }}</div>
           </div>
@@ -142,7 +141,7 @@
         e.preventDefault();
         const moduleName = e.item.dataset.moduleName;
 
-        if (e.item.classList.contains('gallery-item')) {
+        if (e.item.childNodes[0].classList.contains('gallery-item')) {
           e.clone.parentNode.insertBefore(e.item, e.clone);
           e.clone.parentNode.removeChild(e.clone);
 

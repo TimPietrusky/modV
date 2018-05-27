@@ -46,24 +46,12 @@ Vue.use(Buefy, {
 Vue.use(VueThrottleEvent);
 Vue.use(Dropdown);
 Vue.use(Shortkey);
-Vue.use(contextMenu, {
-  store,
-});
-Vue.use(featureAssignment, {
-  store,
-});
-Vue.use(expression, {
-  store,
-});
-Vue.use(midiAssignment, {
-  store,
-});
-Vue.use(lfo, {
-  store,
-});
-Vue.use(grabCanvas, {
-  store,
-});
+Vue.use(contextMenu);
+Vue.use(featureAssignment);
+Vue.use(expression);
+Vue.use(midiAssignment);
+Vue.use(lfo);
+Vue.use(grabCanvas);
 
 modV.use(contextMenu);
 modV.use(featureAssignment);
@@ -106,7 +94,7 @@ export default window.modVVue = new Vue({
     ];
 
     modules.forEach((fileName) => {
-      System.import(`@/modv/sample-modules/${fileName}`).then((Module) => {
+      import(`@/modv/sample-modules/${fileName}`).then((Module) => {
         modV.register(Module.default);
       });
     });
@@ -163,7 +151,7 @@ export default window.modVVue = new Vue({
     ];
 
     isfSamples.forEach((fileName) => {
-      System.import(`@/modv/sample-modules/isf-samples/${fileName}`).then((fragmentShader) => {
+      import(`@/modv/sample-modules/isf-samples/${fileName}`).then((fragmentShader) => {
         class Module extends ModuleISF {
           constructor() {
             super({

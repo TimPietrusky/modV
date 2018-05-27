@@ -14,6 +14,10 @@ onmessage = (e) => {
 
   switch (message.type) {
     // Update the settings of LuminaveConnector
+    default: {
+      break;
+    }
+
     case 'setup': {
       const { width, height, selectionX, selectionY } = message.payload;
 
@@ -30,7 +34,5 @@ onmessage = (e) => {
       luminaveConnector.drawFrame(message.payload);
       break;
     }
-
-    default:
   }
 };
